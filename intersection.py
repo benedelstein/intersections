@@ -106,3 +106,27 @@ if len(sys.argv) == 2:
     print(crashes_at_n_way_intersection(int(sys.argv[1])))
 elif len(sys.argv) > 2:
     print(crashes_at_n_way_given_my_direction( int(sys.argv[1]), int(sys.argv[2]) ) )
+
+
+
+def will_crash_with_u_turns(num_ways, my_end, other_start, other_end):
+    my_start = 0 # always define my start position as 0    
+    if other_start == my_start or my_end >= num_ways or other_end >= num_ways or other_start >= num_ways:
+        raise Exception("invalid inputs")
+
+    # if other_end is 0, set it to num_ways to simplify (basically like saying 0 degrees = 360 degrees)
+    if other_end == 0:
+        other_end = num_ways
+
+    if my_end == other_end:
+        return True # always crashes if they end up in the same road, no matter the start position
+    elif other_end < my_end:
+        if other_start < my_end: # has to be <, not <=, because car must cross intersection to turn left
+            return False
+        else:
+            return True
+    else: # other_end > my_end
+        if other_start < my_end:
+            return True
+        else: # other_start >= my_end.  can do >= here because car is turning right and won't cross
+            return False # if other car starts where I end, and is not crossing over to a lower index, no crash
